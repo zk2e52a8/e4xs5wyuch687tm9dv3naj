@@ -61,13 +61,13 @@ diff_reset_suave=$(($fecha_actual - $ultimo_reset_suave))
 modo_reset="no"
 if [ "$1" == "RESET" ]; then
 	modo_reset="completo"
-	echo "Se ha ejecutado el script con el argumento 'RESET', activando el modo reset"
+	echo; echo "Se ha ejecutado el script con el argumento 'RESET', activando el modo reset"
 elif [ "$diff_reset_completo" -gt "$limite_reset_completo" ]; then
 	modo_reset="completo"
-	echo "Se ha superado el límite, se activará el reset completo y se volverán a descargar todas las fichas"
+	echo; echo "Se ha superado el límite, se activará el reset completo y se volverán a descargar todas las fichas"
 elif [ "$diff_reset_suave" -gt "$limite_reset_suave" ]; then
 	modo_reset="suave"
-	echo "Se ha superado el límite, se activará el reset suave y se volverán a descargar (si es pertinente) las últimas $num_fichas_recortar fichas previamente guardadas de cada url base"
+	echo; echo "Se ha superado el límite, se activará el reset suave y se volverán a descargar (si es pertinente) las últimas $num_fichas_recortar fichas previamente guardadas de cada url base"
 fi
 
 # Crear las carpetas necesarias
@@ -89,7 +89,7 @@ intentos_descarga=0
 # Requiere "npm"
 # https://pptr.dev/
 
-echo "Instalando dependencias..."
+echo; echo "Instalando dependencias..."
 npm install --prefix "$directorio_temp" puppeteer puppeteer-extra puppeteer-extra-plugin-stealth > /dev/null
 
 # Archivo temporal para el javascript
@@ -308,7 +308,7 @@ fi
 
 #####
 
-echo "Descargas completadas, procesando filtro..."
+echo; echo "Descargas completadas, procesando filtro..."
 
 # Ordenar el archivo temporal global y eliminar duplicados (LC_ALL=C lo establece en ascii raw)
 LC_ALL=C sort --unique -o "$ids_unificados" "$ids_unificados"
@@ -325,62 +325,62 @@ sed "s|^|$dominio_tmo##.book-thumbnail-|; s|$|.book.thumbnail|" "$ids_unificados
 	cat "$base_filtro"
 } > "$carpeta_filtro/filtro_ublock_TMO.txt"
 
-echo "Finalizado"
+echo; echo "Finalizado"
 
 # Copia del workflow de gitub (notese que hay que configurar "secrets.WG_CONFIG")
 # .github/workflows/ejecutar_script.yml
 
 # name: Ejecutar script
-# 
+#
 # on:
 #   schedule:
 #     - cron: '0 */12 * * *'
 #   workflow_dispatch:
-# 
+#
 # jobs:
 #   ejecutar_script:
 #     runs-on: ubuntu-latest
-# 
+#
 #     steps:
 #       - name: Clonar repositorio
 #         uses: actions/checkout@v4
-# 
+#
 #       - name: Instalar WireGuard
 #         run: sudo apt-get update && sudo apt-get install -y wireguard-tools
-# 
+#
 #       - name: Configurar WireGuard
 #         run: |
 #           sudo mkdir -p /etc/wireguard/
 #           echo "${{ secrets.WG_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
 #           sudo chmod 600 /etc/wireguard/wg0.conf
-# 
+#
 #       - name: Iniciar conexión WireGuard
 #         run: sudo wg-quick up wg0
-# 
+#
 #       - name: Verificar conexión WireGuard
 #         run: |
 #           if ! curl --max-time 10 -s https://google.com > /dev/null; then
 #             echo "::error:: Conexión no establecida; revisar credenciales"
 #             exit 1
 #           fi
-# 
+#
 #       - name: Configurar Node.js
 #         uses: actions/setup-node@v4
-# 
+#
 #       - name: Configurar git
 #         run: |
 #           git config --global user.name "github-actions"
 #           git config --global user.email "actions@github.com"
-# 
+#
 #       - name: Ejecutar script
 #         run: |
 #           chmod +x ./script_ublock_TMO.sh
 #           ./script_ublock_TMO.sh
-# 
+#
 #       - name: Detener conexión WireGuard
 #         if: always()
 #         run: sudo wg-quick down wg0
-# 
+#
 #       - name: Subir cambios
 #         run: |
 #           git add -A
