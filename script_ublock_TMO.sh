@@ -356,13 +356,6 @@ echo "Finalizado"
 #       - name: Iniciar conexión WireGuard
 #         run: sudo wg-quick up wg0
 #
-#       - name: Verificar conexión WireGuard
-#         run: |
-#           if ! sudo wg show wg0 2>&1 | grep -q 'latest handshake'; then
-#             echo "::error::La conexión WireGuard falló. La clave de WireGuard podría estar obsoleta."
-#             exit 1
-#           fi
-#
 #       - name: Configurar Node.js
 #         uses: actions/setup-node@v4
 #
