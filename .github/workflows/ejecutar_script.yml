@@ -25,16 +25,6 @@ jobs:
       - name: Iniciar conexión WireGuard
         run: sudo wg-quick up wg0
 
-      - name: Verificar conexión WireGuard
-        run: |
-          for i in {1..3}; do
-            if timeout 10 curl --silent --interface wg0 --max-time 10 https://google.com> /tmp/wg_ip; then
-              break
-            else
-              sleep 5
-            fi
-          done || (echo "::error::Clave probablemente caducada"; exit 1)
-
       - name: Configurar Node.js
         uses: actions/setup-node@v4
 
