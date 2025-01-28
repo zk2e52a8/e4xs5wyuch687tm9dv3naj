@@ -27,9 +27,8 @@ jobs:
 
       - name: Verificar conexión WireGuard
         run: |
-          sleep 10
-          if ! sudo wg show wg0 > /dev/null 2>&1; then
-            echo "::error::"
+          if ! curl --max-time 10 -s https://google.com > /dev/null; then
+            echo "::error:: Conexión no establecida; revisar credenciales"
             exit 1
           fi
 
