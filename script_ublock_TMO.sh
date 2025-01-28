@@ -301,6 +301,7 @@ done
 # Todos los archivos de ids originales actualizados, actualizar el timestamp del archivo reset completo
 if [ "$modo_reset" == "completo" ]; then
 	echo "$fecha_actual" > "$archivo_timestamp_completo"
+ 	echo "$fecha_actual" > "$archivo_timestamp_suave"
 elif [ "$modo_reset" == "suave" ]; then
 	echo "$fecha_actual" > "$archivo_timestamp_suave"
 fi
@@ -330,49 +331,56 @@ echo "Finalizado"
 # .github/workflows/ejecutar_script.yml
 
 # name: Ejecutar script
-#
+# 
 # on:
 #   schedule:
 #     - cron: '0 */12 * * *'
 #   workflow_dispatch:
-#
+# 
 # jobs:
 #   ejecutar_script:
 #     runs-on: ubuntu-latest
-#
+# 
 #     steps:
 #       - name: Clonar repositorio
 #         uses: actions/checkout@v4
-#
+# 
 #       - name: Instalar WireGuard
 #         run: sudo apt-get update && sudo apt-get install -y wireguard-tools
-#
+# 
 #       - name: Configurar WireGuard
 #         run: |
 #           sudo mkdir -p /etc/wireguard/
 #           echo "${{ secrets.WG_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
 #           sudo chmod 600 /etc/wireguard/wg0.conf
-#
+# 
 #       - name: Iniciar conexión WireGuard
 #         run: sudo wg-quick up wg0
-#
+# 
+#       - name: Verificar conexión WireGuard
+#         run: |
+#           if ! curl --max-time 10 -s https://google.com > /dev/null; then
+#             echo "::error:: Conexión no establecida; revisar credenciales"
+#             exit 1
+#           fi
+# 
 #       - name: Configurar Node.js
 #         uses: actions/setup-node@v4
-#
+# 
 #       - name: Configurar git
 #         run: |
 #           git config --global user.name "github-actions"
 #           git config --global user.email "actions@github.com"
-#
+# 
 #       - name: Ejecutar script
 #         run: |
 #           chmod +x ./script_ublock_TMO.sh
 #           ./script_ublock_TMO.sh
-#
+# 
 #       - name: Detener conexión WireGuard
 #         if: always()
 #         run: sudo wg-quick down wg0
-#
+# 
 #       - name: Subir cambios
 #         run: |
 #           git add -A
